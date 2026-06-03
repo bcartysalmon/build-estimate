@@ -401,26 +401,18 @@ function S5({ data, onChange, onPay, onSave }) {
                 {finish && <div style={{ marginTop: 7, fontFamily: F.body, fontSize: 12, color: C.ink3, paddingLeft: 2 }}>{FINISH_OPTS.find(f => f.id === finish)?.desc}</div>}
             </div>
 
-            {/* Blurred breakdown */}
-            <div style={{ marginTop: 16, position: 'relative' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, padding: '0 2px' }}><Lbl>Trade breakdown</Lbl><div style={{ fontFamily: F.body, fontSize: 13, color: C.orange, fontWeight: 600 }}>Unlock →</div></div>
-                <div style={{ position: 'relative', borderRadius: 16, overflow: 'hidden' }}>
-                    <div style={{ background: C.white, border: `1px solid ${C.hair}`, borderRadius: 16, padding: '4px 16px', filter: 'blur(4px)', userSelect: 'none', pointerEvents: 'none' }}>
-                        {trades.map((t, i) => <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '11px 0', borderBottom: i < trades.length - 1 ? `1px solid ${C.hair}` : 'none' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}><div style={{ width: 8, height: 8, borderRadius: 2, background: t.color }} /><span style={{ fontFamily: F.body, fontSize: 14, color: C.ink }}>{t.label}</span></div>
-                            <span style={{ fontFamily: F.mono, fontSize: 14, color: C.ink }}>{fmt(Math.round(lo * t.pct))}</span>
-                        </div>)}
+            {/* $29 feature card */}
+            <div style={{ marginTop: 16, background: C.ink, borderRadius: 20, padding: '20px 20px 22px', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ position: 'absolute', top: -30, right: -30, width: 120, height: 120, borderRadius: 60, background: `radial-gradient(circle,${C.orange}35,transparent 70%)`, pointerEvents: 'none' }} />
+                <div style={{ fontFamily: F.mono, fontSize: 11, color: 'rgba(255,255,255,.4)', textTransform: 'uppercase', letterSpacing: .14, marginBottom: 8 }}>Full detailed report</div>
+                <div style={{ fontFamily: F.mono, fontSize: 42, fontWeight: 700, color: '#fff', letterSpacing: -1, lineHeight: 1 }}>$29</div>
+                <div style={{ fontFamily: F.body, fontSize: 14, color: 'rgba(255,255,255,.55)', marginTop: 8, marginBottom: 20, lineHeight: '20px' }}>One-time payment. Instant delivery. No subscription.</div>
+                {[['📋', 'Trade-by-trade cost breakdown'], ['📄', 'Downloadable PDF report'], ['🔗', 'Shareable link for broker or builder'], ['✏️', 'Edit any line item on screen'], ['♾️', 'Free re-runs if you change your mind']].map(([icon, text]) => (
+                    <div key={text} style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14 }}>
+                        <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,255,255,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 17, flexShrink: 0 }}>{icon}</div>
+                        <div style={{ fontFamily: F.body, fontSize: 15, color: 'rgba(255,255,255,.9)', lineHeight: '20px' }}>{text}</div>
                     </div>
-                    <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-                        <div style={{ fontSize: 20 }}>🔒</div>
-                        <div style={{ fontFamily: F.body, fontSize: 13, fontWeight: 600, color: C.ink }}>Full breakdown in paid report</div>
-                        <div style={{ fontFamily: F.body, fontSize: 12, color: C.ink2 }}>Trade-by-trade · PDF · Shareable link</div>
-                    </div>
-                </div>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'center', gap: 12, margin: '14px 0 6px', flexWrap: 'wrap' }}>
-                {['2,400+ builds', 'Updated Q1 2025', 'Instant delivery'].map(t => <div key={t} style={{ fontFamily: F.body, fontSize: 11, color: C.ink3 }}>{t}</div>)}
+                ))}
             </div>
             <div style={{ height: 8 }} />
         </div>
@@ -429,43 +421,6 @@ function S5({ data, onChange, onPay, onSave }) {
             <Ghost onClick={onSave}>Save ballpark (free)</Ghost>
         </div>
         <HBar />
-    </div>;
-}
-
-// 6 · Payment gate (placeholder — wire to Stripe)
-function S6({ data, onPaid, onBack }) {
-    const [lo, hi] = calcEst(data.rooms || [], data.roomSizes || {}, data.finish || 'standard');
-    return <div className="BEs" style={{ background: C.ink }}>
-        <SBar dark />
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '20px 26px 0' }}>
-            <div style={{ width: 48, height: 48, borderRadius: 14, background: 'rgba(255,255,255,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <svg width="24" height="24" viewBox="0 0 28 28" fill="none"><path d="M4 22V10l10-6 10 6v12" stroke="#fff" strokeWidth="2.4" strokeLinejoin="round" /><path d="M10 22v-7h8v7" stroke={C.orange} strokeWidth="2.4" strokeLinejoin="round" /></svg>
-            </div>
-            <div style={{ marginTop: 28 }}>
-                <div style={{ fontFamily: F.mono, fontSize: 11, color: 'rgba(255,255,255,.4)', textTransform: 'uppercase', letterSpacing: .8 }}>Full detailed report</div>
-                <div style={{ fontFamily: F.mono, fontSize: 48, fontWeight: 600, color: '#fff', marginTop: 6, letterSpacing: -1 }}>$29</div>
-                <div style={{ fontFamily: F.body, fontSize: 15, color: 'rgba(255,255,255,.6)', marginTop: 8, lineHeight: '21px' }}>One-time payment. Instant delivery. No subscription.</div>
-            </div>
-            <div style={{ marginTop: 26, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {[['📋', 'Trade-by-trade cost breakdown'], ['📄', 'Downloadable PDF report'], ['🔗', 'Shareable link for broker or builder'], ['✏️', 'Edit any line item on screen'], ['♾️', 'Free re-runs if you change your mind']].map(([icon, text]) => (
-                    <div key={text} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                        <div style={{ width: 32, height: 32, borderRadius: 9, background: 'rgba(255,255,255,.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, flexShrink: 0 }}>{icon}</div>
-                        <div style={{ fontFamily: F.body, fontSize: 14, color: 'rgba(255,255,255,.85)' }}>{text}</div>
-                    </div>
-                ))}
-            </div>
-            <div style={{ marginTop: 22, padding: '12px 16px', background: 'rgba(255,255,255,.07)', borderRadius: 14 }}>
-                <div style={{ fontFamily: F.body, fontSize: 12, color: 'rgba(255,255,255,.4)', marginBottom: 4 }}>Your ballpark estimate</div>
-                <div style={{ fontFamily: F.mono, fontSize: 20, fontWeight: 600, color: '#fff', fontVariantNumeric: 'tabular-nums' }}>{fmtFull(lo)} – {fmtFull(hi)}</div>
-            </div>
-        </div>
-        <div style={{ padding: '14px 22px 14px', display: 'flex', flexDirection: 'column', gap: 9 }}>
-            {/* ⚠️  TODO: replace onClick with Stripe Checkout */}
-            <Btn color={C.orange} onClick={onPaid}>Continue to payment — $29</Btn>
-            <Ghost onClick={onBack} style={{ borderColor: 'rgba(255,255,255,.2)', color: 'rgba(255,255,255,.6)' }}>Back to estimate</Ghost>
-            <div style={{ textAlign: 'center', fontFamily: F.body, fontSize: 12, color: 'rgba(255,255,255,.3)' }}>Secured by Stripe · buildestimate.com.au</div>
-        </div>
-        <HBar dark />
     </div>;
 }
 
@@ -794,7 +749,7 @@ function SSave({ data, onChange, onSubmit, onBack }) {
 // ─── Step map & orchestrator ──────────────────────────────────────────────────
 const STEP_MAP = [
     'welcome', 'address', 'contact', 'scope', 'rooms', 'sizing', 'ballpark',
-    'savefree', 'payment',
+    'savefree',
     'upload', 'confirm', 'site', 'council', 'demo', 'living', 'structural',
     'generating', 'report',
 ];
@@ -823,9 +778,8 @@ export default function BuildEstimator() {
                 {step === 'scope' && <S2 data={form} onChange={up} onContinue={next} onBack={back} />}
                 {step === 'rooms' && <S3 data={form} onChange={up} onContinue={next} onBack={back} />}
                 {step === 'sizing' && <S4 data={form} onChange={up} onContinue={next} onBack={back} />}
-                {step === 'ballpark' && <S5 data={form} onChange={up} onPay={() => goTo('payment')} onSave={() => goTo('savefree')} />}
+                {step === 'ballpark' && <S5 data={form} onChange={up} onPay={() => goTo('upload')} onSave={() => goTo('savefree')} />}
                 {step === 'savefree' && <SSave data={form} onChange={up} onSubmit={next} onBack={() => goTo('ballpark')} />}
-                {step === 'payment' && <S6 data={form} onPaid={() => goTo('upload')} onBack={() => goTo('ballpark')} />}
                 {step === 'upload' && <S7 data={form} onChange={up} onContinue={next} onBack={back} />}
                 {step === 'confirm' && <S8 data={form} onChange={up} onContinue={next} onBack={back} />}
                 {step === 'site' && <S9 data={form} onChange={up} onContinue={next} onBack={back} />}
