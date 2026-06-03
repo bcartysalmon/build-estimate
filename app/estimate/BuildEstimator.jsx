@@ -206,8 +206,8 @@ function S1({ data, onChange, onContinue, onBack }) {
         setDone(true);
     };
     return <div className="BEs" style={{ background: C.paper }}>
-        <SBar /><PBar step={1} total={6} />
-        <NavRow onBack={onBack} stepIdx={0} totalSteps={6} />
+        <SBar /><PBar step={1} total={7} />
+        <NavRow onBack={onBack} stepIdx={0} totalSteps={7} />
         <H1 sub="We'll look up your property details automatically.">What's the address?</H1>
         <div style={{ flex: 1, padding: '20px 22px 0', overflowY: 'auto' }}>
             <div style={{ background: C.white, border: `1.5px solid ${q.length > 4 ? C.blue : C.hair}`, borderRadius: 14, padding: '0 16px', height: 52, display: 'flex', alignItems: 'center', gap: 10, transition: 'border-color .15s' }}>
@@ -229,12 +229,65 @@ function S1({ data, onChange, onContinue, onBack }) {
     </div>;
 }
 
+// 1b · Name & email
+function S1b({ data, onChange, onContinue, onBack }) {
+    const ok = data.name?.trim().length > 1 && data.email?.includes('@');
+    return <div className="BEs" style={{ background: C.paper }}>
+        <SBar /><PBar step={2} total={7} />
+        <NavRow onBack={onBack} stepIdx={1} totalSteps={7} />
+        <H1 sub="We'll save your estimate and send you a copy as a free PDF.">Who are we estimating for?</H1>
+        <div style={{ flex: 1, padding: '24px 22px 0' }}>
+            {/* Name */}
+            <div style={{ marginBottom: 12 }}>
+                <Lbl>Your name</Lbl>
+                <div style={{ background: C.white, border: `1.5px solid ${data.name?.length > 0 ? C.blue : C.hair}`, borderRadius: 14, padding: '0 16px', height: 52, display: 'flex', alignItems: 'center', transition: 'border-color .15s' }}>
+                    <input
+                        type="text"
+                        placeholder="First and last name"
+                        value={data.name || ''}
+                        onChange={e => onChange({ name: e.target.value })}
+                        style={{ flex: 1, border: 'none', background: 'transparent', fontFamily: F.display, fontSize: 16, color: C.ink }}
+                    />
+                </div>
+            </div>
+            {/* Email */}
+            <div style={{ marginBottom: 20 }}>
+                <Lbl>Email address</Lbl>
+                <div style={{ background: C.white, border: `1.5px solid ${data.email?.includes('@') ? C.blue : C.hair}`, borderRadius: 14, padding: '0 16px', height: 52, display: 'flex', alignItems: 'center', transition: 'border-color .15s' }}>
+                    <input
+                        type="email"
+                        placeholder="you@example.com"
+                        value={data.email || ''}
+                        onChange={e => onChange({ email: e.target.value })}
+                        style={{ flex: 1, border: 'none', background: 'transparent', fontFamily: F.display, fontSize: 16, color: C.ink }}
+                    />
+                </div>
+            </div>
+            {/* What they get */}
+            <div style={{ background: C.white, border: `1px solid ${C.hair}`, borderRadius: 16, padding: '14px 16px' }}>
+                <div style={{ fontFamily: F.body, fontSize: 13, fontWeight: 600, color: C.ink, marginBottom: 10 }}>What you'll receive</div>
+                {[['📊', 'Free ballpark estimate PDF sent to your inbox'], ['🔒', 'Your details are never sold or shared'], ['⚡', 'Unlock the full $29 report any time'],].map(([icon, text]) => (
+                    <div key={text} style={{ display: 'flex', alignItems: 'center', gap: 10, paddingBottom: 8 }}>
+                        <span style={{ fontSize: 15, flexShrink: 0 }}>{icon}</span>
+                        <span style={{ fontFamily: F.body, fontSize: 13, color: C.ink2, lineHeight: '18px' }}>{text}</span>
+                    </div>
+                ))}
+            </div>
+        </div>
+        <BRow>
+            <Btn color={C.blue} onClick={onContinue} disabled={!ok}>Continue</Btn>
+            <div style={{ textAlign: 'center', fontFamily: F.body, fontSize: 12, color: C.ink3 }}>No password needed · Unsubscribe any time</div>
+        </BRow>
+        <HBar />
+    </div>;
+}
+
 // 2 · Project scope
 function S2({ data, onChange, onContinue, onBack }) {
     const opts = [{ id: 'single', icon: '🍳', title: 'Single room', sub: '1 room refresh' }, { id: 'multi', icon: '🏠', title: 'Multi-room', sub: '2–5 rooms' }, { id: 'whole', icon: '🔨', title: 'Whole home', sub: 'Full gut reno' }];
     return <div className="BEs" style={{ background: C.paper }}>
-        <SBar /><PBar step={2} total={6} />
-        <NavRow onBack={onBack} stepIdx={1} totalSteps={6} />
+        <SBar /><PBar step={3} total={7} />
+        <NavRow onBack={onBack} stepIdx={2} totalSteps={7} />
         <H1 sub="Filters room options and sets sizing defaults.">How much are we tackling?</H1>
         <div style={{ flex: 1, padding: '24px 22px 0' }}>
             <div style={{ display: 'flex', gap: 10 }}>
@@ -262,8 +315,8 @@ function S3({ data, onChange, onContinue, onBack }) {
         else if (rooms.length < max) onChange({ rooms: [...rooms, id] });
     };
     return <div className="BEs" style={{ background: C.paper }}>
-        <SBar /><PBar step={3} total={6} />
-        <NavRow onBack={onBack} stepIdx={2} totalSteps={6} />
+        <SBar /><PBar step={4} total={7} />
+        <NavRow onBack={onBack} stepIdx={3} totalSteps={7} />
         <H1 sub={data.projectScope === 'single' ? 'Pick the one room you\'re refreshing.' : 'Tap to include. Estimate updates live.'}>Which rooms?</H1>
         <div style={{ flex: 1, padding: '22px 22px 0', overflowY: 'auto' }}>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>{avail.map(id => <Chip key={id} label={ROOM_LBL[id]} selected={rooms.includes(id)} color={C.blue} onClick={() => toggle(id)} />)}</div>
@@ -282,8 +335,8 @@ function S4({ data, onChange, onContinue, onBack }) {
     const [lo, hi] = calcEst(rooms, sizes, data.finish || 'standard');
     const setSz = (r, v) => onChange({ roomSizes: { ...sizes, [r]: v } });
     return <div className="BEs" style={{ background: C.paper }}>
-        <SBar /><PBar step={4} total={6} />
-        <NavRow onBack={onBack} stepIdx={3} totalSteps={6} />
+        <SBar /><PBar step={5} total={7} />
+        <NavRow onBack={onBack} stepIdx={4} totalSteps={7} />
         <H1 sub="Defaults from typical Australian homes. Drag to adjust.">Room sizes</H1>
         <div style={{ flex: 1, padding: '20px 22px 0', overflowY: 'auto' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -740,7 +793,7 @@ function SSave({ data, onChange, onSubmit, onBack }) {
 
 // ─── Step map & orchestrator ──────────────────────────────────────────────────
 const STEP_MAP = [
-    'welcome', 'address', 'scope', 'rooms', 'sizing', 'ballpark',
+    'welcome', 'address', 'contact', 'scope', 'rooms', 'sizing', 'ballpark',
     'savefree', 'payment',
     'upload', 'confirm', 'site', 'council', 'demo', 'living', 'structural',
     'generating', 'report',
@@ -766,6 +819,7 @@ export default function BuildEstimator() {
             <div className="BEw">
                 {step === 'welcome' && <S0 onStart={next} />}
                 {step === 'address' && <S1 data={form} onChange={up} onContinue={next} onBack={back} />}
+                {step === 'contact' && <S1b data={form} onChange={up} onContinue={next} onBack={back} />}
                 {step === 'scope' && <S2 data={form} onChange={up} onContinue={next} onBack={back} />}
                 {step === 'rooms' && <S3 data={form} onChange={up} onContinue={next} onBack={back} />}
                 {step === 'sizing' && <S4 data={form} onChange={up} onContinue={next} onBack={back} />}
